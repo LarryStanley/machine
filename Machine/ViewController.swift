@@ -11,29 +11,31 @@ import Google_Material_Design_Icons_Swift
 import Alamofire
 import KeychainSwift
 import ionicons
+import Hex
 
 var accountField: UITextField = UITextField()
 var passwordField: UITextField = UITextField()
 var tableView: UITableView = UITableView()
 var moneyData = []
 var plusButton: UIButton = UIButton()
+var mainScrollView: UIScrollView = UIScrollView()
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let colorTop = UIColor(red: 72/255.0, green: 129/255.0, blue: 151/255.0, alpha: 1.0).CGColor
-        let colorMid = UIColor(red: 46/255.0, green: 116/255.0, blue: 138/255.0, alpha: 1.0).CGColor
+        let colorTop = UIColor(red: 66/255.0, green: 76/255.0, blue: 121/255.0, alpha: 1.0).CGColor
+        //let colorMid = UIColor(red: 46/255.0, green: 116/255.0, blue: 138/255.0, alpha: 1.0).CGColor
 
-        let colorBottom = UIColor(red: 70/255.0, green: 95/255.0, blue: 106/255.0, alpha: 1.0).CGColor
+        let colorBottom = UIColor(red: 145/255.0, green: 133/255.0, blue: 161/255.0, alpha: 1.0).CGColor
         
         let gradient: CAGradientLayer
         gradient = CAGradientLayer()
-        gradient.colors = [colorTop, colorMid, colorBottom]
-/*        gradient.startPoint = CGPointMake(0, 0)
-        gradient.endPoint = CGPointMake(1, 1)*/
-        gradient.locations = [0, 0.7, 1]
+        gradient.colors = [colorTop, colorBottom]
+        gradient.startPoint = CGPointMake(0, 0)
+        gradient.endPoint = CGPointMake(1, 1)
+        gradient.locations = [0, 1]
 
         gradient.frame = self.view.bounds
         self.view.layer.insertSublayer(gradient, atIndex: 0)
@@ -56,6 +58,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         accountField = UITextField(frame: CGRectMake(30, self.view.frame.height/2 - 150, self.view.frame.size.width - 60, 44))
         accountField.placeholder = "帳號"
+        accountField.attributedPlaceholder = NSAttributedString(string:"帳號", attributes:[NSForegroundColorAttributeName: UIColor(hex: "CFD8DC")])
         accountField.layer.addSublayer(accountBorder)
         accountField.layer.masksToBounds = true
         self.view.addSubview(accountField)
@@ -67,6 +70,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         passwordField = UITextField(frame: CGRectMake(30, accountField.frame.height + accountField.frame.origin.y + 10, self.view.frame.size.width - 60, 44))
         passwordField.placeholder = "密碼"
+        passwordField.attributedPlaceholder = NSAttributedString(string:"密碼", attributes:[NSForegroundColorAttributeName: UIColor(hex: "CFD8DC")])
         passwordField.layer.addSublayer(passwordBorder)
         passwordField.layer.masksToBounds = true
         passwordField.secureTextEntry = true
@@ -77,7 +81,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loginButton.setTitle("登入", forState: .Normal)
         loginButton.sizeToFit()
         loginButton.frame = CGRectMake( 30, passwordField.frame.height + passwordField.frame.origin.y + 20, self.view.frame.size.width - 60, 40)
-        loginButton.backgroundColor = UIColor(red: 214/255, green: 230/255, blue: 229/255, alpha: 1)
+        loginButton.backgroundColor = UIColor(hex: "ECEFF1")
         loginButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         loginButton.addTarget(self, action: "processLogin:", forControlEvents: .TouchUpInside)
         self.view.addSubview(loginButton)
@@ -112,6 +116,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func showUserInterface() {
+        
         let menuButton: UIButton
         menuButton = UIButton()
         menuButton.frame = CGRectMake(10, 30, 44, 44)
@@ -122,63 +127,50 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         menuButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         self.view.addSubview(menuButton)
         
-        plusButton = UIButton()
-        plusButton.frame = CGRectMake( self.view.bounds.width - 54, 30, 44, 44)
-        //plusButton.titleLabel!.font = UIFont.systemFontOfSize(40)
-        //plusButton.setGMDIcon(GMDType.GMDAdd, forState: .Normal)
-        plusButton.titleLabel?.font = IonIcons.fontWithSize(40)
-        plusButton.setTitle(ion_ios_plus_empty, forState: .Normal)
-        plusButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        plusButton.addTarget(self, action: "showRecordView:", forControlEvents: .TouchUpInside)
-        self.view.addSubview(plusButton)
+        mainScrollView = UIScrollView(frame: self.view.frame)
+        self.view.addSubview(mainScrollView)
         
-        // background circle
-        let circleCenter = CGPoint(x: self.view.frame.width/2 ,y: plusButton.frame.origin.y + 130)
-        let circlePath = UIBezierPath(arcCenter: circleCenter, radius: CGFloat(80), startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = circlePath.CGPath
-        shapeLayer.fillColor = UIColor.clearColor().CGColor
-        shapeLayer.strokeColor = UIColor.whiteColor().CGColor
-        shapeLayer.lineWidth = 1.5
-        view.layer.addSublayer(shapeLayer)
-        
-        let radius = CGFloat(80)
-        let circle = CAShapeLayer()
-        circle.path = UIBezierPath(arcCenter: circleCenter, radius: radius, startAngle: CGFloat(-M_PI_2), endAngle: CGFloat(-M_PI), clockwise: true).CGPath
-        circle.fillColor = UIColor.clearColor().CGColor
-        circle.strokeColor = UIColor(red: 217/255.0, green: 76/255.0, blue: 58/255.0, alpha: 1).CGColor
-        circle.lineWidth = 2.0
-        circle.strokeEnd = 1.0
-        self.view.layer.addSublayer(circle)
-        
-        let drawAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        drawAnimation.repeatCount = 1.0
-        drawAnimation.fromValue = NSNumber(double: 0)
-        drawAnimation.toValue = NSNumber(float: 3.0/4.0)
-        drawAnimation.duration = 5
-        drawAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-        circle.addAnimation(drawAnimation, forKey: "animateCircle")
+        let transparentView: UIView = UIView(frame: CGRectMake(0, self.view.frame.height - 100, self.view.frame.width, 100))
+        transparentView.backgroundColor = UIColor(hex: "263238")
+        transparentView.alpha = 0.4
+        self.view.addSubview(transparentView)
         
         let todayPercentLabel: UILabel
         todayPercentLabel = UILabel()
-        todayPercentLabel.text = "64%"
-        todayPercentLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 64)
+        todayPercentLabel.text = "0"
+        todayPercentLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 90)
         todayPercentLabel.sizeToFit()
-        todayPercentLabel.center = circleCenter
+        //todayPercentLabel.center = circleCenter
+        todayPercentLabel.frame = CGRectMake(10, transparentView.frame.origin.y - todayPercentLabel.frame.size.height, todayPercentLabel.frame.size.width , todayPercentLabel.frame.size.height)
         todayPercentLabel.textColor = UIColor.whiteColor()
-        self.view.addSubview(todayPercentLabel)
+        mainScrollView.addSubview(todayPercentLabel)
         
-        let lineView: UIView
-        lineView = UIView()
-        lineView.frame = CGRectMake( 20, circleCenter.y + radius + 20, self.view.frame.width - 40, 1.0);
-        lineView.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(lineView)
+        let textButton = UIButton()
+        textButton.frame = CGRectMake( self.view.bounds.width/2 - 54, 5, 44, 44)
+        textButton.titleLabel!.font = IonIcons.fontWithSize(40)
+        textButton.setTitle(ion_ios_compose_outline, forState: .Normal)
+        textButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        textButton.addTarget(self, action: "showTextRecord:", forControlEvents: .TouchUpInside)
+        transparentView.addSubview(textButton)
         
-        let tableView = UITableView(frame:CGRectMake(10, lineView.frame.origin.y + 10, self.view.frame.size.width - 20, self.view.frame.size.height - lineView.frame.origin.y - 20))
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = UIColor.clearColor()
-        self.view.addSubview(tableView)
+        let qrCodeButton = UIButton()
+        qrCodeButton.frame = CGRectMake( self.view.bounds.width/2 + 10, 5, 44, 44)
+        qrCodeButton.titleLabel!.font = IonIcons.fontWithSize(40)
+        qrCodeButton.setTitle(ion_ios_barcode_outline, forState: .Normal)
+        qrCodeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        qrCodeButton.addTarget(self, action: "showCodeRecord:", forControlEvents: .TouchUpInside)
+        transparentView.addSubview(qrCodeButton)
+
+        let lineViewInTransparentView = UIView(frame: CGRectMake( 20, qrCodeButton.frame.origin.y + qrCodeButton.frame.size.height + 5, self.view.bounds.width - 40, 1));
+        lineViewInTransparentView.backgroundColor = UIColor(hex: "ECEFF1")
+        transparentView.addSubview(lineViewInTransparentView)
+        
+        let predictLabel = UILabel(frame: CGRectMake( 15, lineViewInTransparentView.frame.size.height + lineViewInTransparentView.frame.origin.y + 10, 0, 0))
+        predictLabel.textColor = UIColor(hex: "ECEFF1")
+        predictLabel.text = "花了109元的大麥克？"
+        predictLabel.font = UIFont.systemFontOfSize(18)
+        predictLabel.sizeToFit()
+        transparentView.addSubview(predictLabel)
         
         let keychain = KeychainSwift()
         let headers = [
@@ -190,7 +182,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 response in switch response.result {
                 case .Success(let JSON):
                     moneyData = JSON["results"] as! NSArray
-                    tableView.reloadData()
+                    //tableView.reloadData()
+                    todayPercentLabel.text? = "\(JSON["total_amount"] as! Int)"
+                    todayPercentLabel.sizeToFit()
                 case .Failure(let error):
                     print("Request failed with error: \(error)")
                 }
@@ -198,24 +192,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     }
     
+    func showTextRecord(sender: UIButton) {
+        
+    }
+    
     func showRecordView(sender: UIButton) {
         let recordView: RecordView
         recordView = RecordView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.height))
         self.view.addSubview(recordView)
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moneyData.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "Cell")
-        cell.backgroundColor = UIColor.clearColor()
-        cell.textLabel?.textColor = UIColor.whiteColor()
-        cell.textLabel?.textAlignment = NSTextAlignment.Center
-        cell.textLabel?.font = UIFont(name: "System", size: 16)
-        cell.textLabel!.text = "\(moneyData.objectAtIndex(indexPath.row)["item"] as! String)"
-        return cell
     }
     
     override func didReceiveMemoryWarning() {

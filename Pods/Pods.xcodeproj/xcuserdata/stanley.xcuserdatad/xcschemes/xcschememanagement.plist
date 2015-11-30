@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Hex.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>KeychainSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -47,12 +52,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>5E180BB4976838D5941DF6D0515C8715</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>81FBB7E25FAC11BE4142745695ECF417</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9A718AE27EBC0E0B63E81B4B1B9D0025</key>
+		<key>C560DD0F5594CFAEB031A049BB5981B8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
