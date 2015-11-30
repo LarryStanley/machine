@@ -1,0 +1,19 @@
+PODS:
+  - Alamofire (3.1.3)
+  - Google-Material-Design-Icons-Swift (1.0.1)
+  - ionicons (2.0.3)
+  - KeychainSwift (3.0.10)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.0)
+  - Google-Material-Design-Icons-Swift (~> 1.0.1)
+  - ionicons
+  - KeychainSwift (~> 3.0)
+
+SPEC CHECKSUMS:
+  Alamofire: 9f93b56389e48def9220dd57d1f44b1927229a5a
+  Google-Material-Design-Icons-Swift: ff587db57d713061f66b8457229d1af2cae84c56
+  ionicons: ec1e86e6c3316bd9942a7f024080dd75c70dd6a5
+  KeychainSwift: b3fcc33bd6e12778be79d9be27e0f2e369b8cc4e
+
+COCOAPODS: 0.39.0
