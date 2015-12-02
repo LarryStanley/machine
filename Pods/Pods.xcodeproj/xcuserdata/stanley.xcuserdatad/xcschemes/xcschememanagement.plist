@@ -34,6 +34,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftLocation-SwiftLocation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SwiftLocation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Timepiece.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>ionicons.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,6 +57,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>06305A5DF8166999CA85DA8B0F3A3C6D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3CFFB76B0E9B3A0EF31FC162BB9B3699</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>432ECC54282C84882B482CCB4CF227FC</key>
 		<dict>
 			<key>primary</key>
@@ -52,12 +77,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5E180BB4976838D5941DF6D0515C8715</key>
+		<key>81FBB7E25FAC11BE4142745695ECF417</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>81FBB7E25FAC11BE4142745695ECF417</key>
+		<key>8BF8498CF581AA7F6883529F2C6588F8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C410145D8BFDE3F39E3520C5BF07BB74</key>
 		<dict>
 			<key>primary</key>
 			<true/>

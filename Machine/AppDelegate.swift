@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+        self.window!.backgroundColor = UIColor.whiteColor()
+        
         return true
     }
 

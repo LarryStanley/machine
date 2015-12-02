@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'B6EC12A77A1A4E2742BCC140'
+               BlueprintIdentifier = '5EA13506443F9B21EC36C15F'
                BlueprintName = 'ionicons'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'ionicons.framework'>

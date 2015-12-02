@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		48279ACA1C0B371C003D16A1 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48279AC91C0B371B003D16A1 /* RecordView.swift */; };
+		48279ACC1C0C42F3003D16A1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48279ACB1C0C42F3003D16A1 /* CoreLocation.framework */; };
+		48279ACE1C0C4414003D16A1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48279ACD1C0C4414003D16A1 /* MapKit.framework */; };
+		48279AD01C0C6B38003D16A1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48279ACF1C0C6B38003D16A1 /* AVFoundation.framework */; };
+		48279AD21C0C6B58003D16A1 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48279AD11C0C6B58003D16A1 /* QRCodeScannerView.swift */; };
+		48279AD41C0C9A45003D16A1 /* SingleItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48279AD31C0C9A45003D16A1 /* SingleItemView.swift */; };
+		48279AD61C0DC74A003D16A1 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48279AD51C0DC74A003D16A1 /* DetailViewController.swift */; };
 		489326701C05BB4A009B0256 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4893266F1C05BB4A009B0256 /* AppDelegate.swift */; };
 		489326721C05BB4A009B0256 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489326711C05BB4A009B0256 /* ViewController.swift */; };
 		489326751C05BB4A009B0256 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489326731C05BB4A009B0256 /* Main.storyboard */; };
@@ -39,6 +45,12 @@
 		244B111D97A6E8943B761573 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		35992982B9152A54C9318E1C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		48279AC91C0B371B003D16A1 /* RecordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
+		48279ACB1C0C42F3003D16A1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		48279ACD1C0C4414003D16A1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		48279ACF1C0C6B38003D16A1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		48279AD11C0C6B58003D16A1 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
+		48279AD31C0C9A45003D16A1 /* SingleItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleItemView.swift; sourceTree = "<group>"; };
+		48279AD51C0DC74A003D16A1 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4893266C1C05BB4A009B0256 /* Machine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Machine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4893266F1C05BB4A009B0256 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		489326711C05BB4A009B0256 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +72,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48279AD01C0C6B38003D16A1 /* AVFoundation.framework in Frameworks */,
+				48279ACC1C0C42F3003D16A1 /* CoreLocation.framework in Frameworks */,
+				48279ACE1C0C4414003D16A1 /* MapKit.framework in Frameworks */,
 				AD744E2F8DBABA5DAA77AF3E /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,7 +123,10 @@
 			children = (
 				4893266F1C05BB4A009B0256 /* AppDelegate.swift */,
 				489326711C05BB4A009B0256 /* ViewController.swift */,
+				48279AD31C0C9A45003D16A1 /* SingleItemView.swift */,
+				48279AD11C0C6B58003D16A1 /* QRCodeScannerView.swift */,
 				48279AC91C0B371B003D16A1 /* RecordView.swift */,
+				48279AD51C0DC74A003D16A1 /* DetailViewController.swift */,
 				489326731C05BB4A009B0256 /* Main.storyboard */,
 				489326761C05BB4B009B0256 /* Assets.xcassets */,
 				489326781C05BB4B009B0256 /* LaunchScreen.storyboard */,
@@ -147,6 +165,9 @@
 		C42FDEAB294D1FFCEECBE2CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				48279ACF1C0C6B38003D16A1 /* AVFoundation.framework */,
+				48279ACD1C0C4414003D16A1 /* MapKit.framework */,
+				48279ACB1C0C42F3003D16A1 /* CoreLocation.framework */,
 				F0BE0C032C34C4C5C08D8AB5 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -224,6 +245,11 @@
 					4893266B1C05BB4A009B0256 = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = 7RGJFTJXTK;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					4893267F1C05BB4B009B0256 = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -336,8 +362,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				489326721C05BB4A009B0256 /* ViewController.swift in Sources */,
+				48279AD21C0C6B58003D16A1 /* QRCodeScannerView.swift in Sources */,
 				48279ACA1C0B371C003D16A1 /* RecordView.swift in Sources */,
+				48279AD61C0DC74A003D16A1 /* DetailViewController.swift in Sources */,
 				489326701C05BB4A009B0256 /* AppDelegate.swift in Sources */,
+				48279AD41C0C9A45003D16A1 /* SingleItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +509,7 @@
 			baseConfigurationReference = 244B111D97A6E8943B761573 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Machine/Info.plist;
@@ -495,6 +525,7 @@
 			baseConfigurationReference = 35992982B9152A54C9318E1C /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Machine/Info.plist;

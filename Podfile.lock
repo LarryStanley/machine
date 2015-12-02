@@ -4,6 +4,8 @@ PODS:
   - Hex (3.0.0)
   - ionicons (2.0.3)
   - KeychainSwift (3.0.10)
+  - SwiftLocation (0.2.0)
+  - Timepiece (0.4.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
@@ -11,6 +13,8 @@ DEPENDENCIES:
   - Hex
   - ionicons
   - KeychainSwift (~> 3.0)
+  - SwiftLocation
+  - Timepiece
 
 SPEC CHECKSUMS:
   Alamofire: 9f93b56389e48def9220dd57d1f44b1927229a5a
@@ -18,5 +22,7 @@ SPEC CHECKSUMS:
   Hex: ee430da9c4412d9196366ae5327f279021dc03eb
   ionicons: ec1e86e6c3316bd9942a7f024080dd75c70dd6a5
   KeychainSwift: b3fcc33bd6e12778be79d9be27e0f2e369b8cc4e
+  SwiftLocation: ea78ae4a822581bde7379d98c8513273723c8840
+  Timepiece: cf53bb908bf542acc0e3d5f69cabfed869df4ebd
 
 COCOAPODS: 0.39.0
