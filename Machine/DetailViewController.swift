@@ -99,12 +99,17 @@ class DetailViewController: UIViewController {
         lineBetweenDetailView.backgroundColor = UIColor(hex: "ECEFF1")
         transparentView.addSubview(lineBetweenDetailView)
 
-        let mapView = MKMapView(frame: CGRectMake( 20, lineBetweenDetailView.frame.origin.y + lineBetweenDetailView.frame.size.height + 15, self.view.bounds.width - 40, 150))
+        let mapView = MKMapView(frame: CGRectMake( 20, lineBetweenDetailView.frame.origin.y + lineBetweenDetailView.frame.size.height + 15 + transparentView.frame.origin.y, self.view.bounds.width - 40, 150))
         mapView.centerCoordinate = CLLocationCoordinate2DMake(self.itemData["location"]!["latitude"] as! Double, self.itemData["location"]!["longitude"] as! Double)
         mapView.region = MKCoordinateRegionMake(mapView.centerCoordinate, MKCoordinateSpanMake( 0.005 , 0.005))
-        transparentView.addSubview(mapView)
-        transparentView.frame = CGRectMake(transparentView.frame.origin.x, transparentView.frame.origin.y, transparentView.frame.size.width, mapView.frame.origin.y + mapView.frame.size.height + 10 + self.view.frame.height)
+        mainScrollView.addSubview(mapView)
+        transparentView.frame = CGRectMake(transparentView.frame.origin.x, transparentView.frame.origin.y, transparentView.frame.size.width, mapView.frame.origin.y + mapView.frame.size.height + 10 + self.view.frame.height - transparentView.frame.origin.y)
 
+        let mapPin = MKPointAnnotation()
+        mapPin.title = (self.itemData["item"] as! String)
+        mapPin.coordinate = mapView.centerCoordinate
+        mapView.addAnnotation(mapPin)
+        
         mainScrollView.contentSize = CGSizeMake(self.view.frame.size.width, transparentView.frame.origin.y + transparentView.frame.size.height - self.view.frame.height)
     }
     

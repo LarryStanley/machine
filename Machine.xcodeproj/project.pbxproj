@@ -21,6 +21,7 @@
 		4893267A1C05BB4B009B0256 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489326781C05BB4B009B0256 /* LaunchScreen.storyboard */; };
 		489326851C05BB4B009B0256 /* MachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489326841C05BB4B009B0256 /* MachineTests.swift */; };
 		489326901C05BB4B009B0256 /* MachineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4893268F1C05BB4B009B0256 /* MachineUITests.swift */; };
+		48F50A681C0F6E6300C74616 /* SingleDayScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F50A671C0F6E6300C74616 /* SingleDayScrollView.swift */; };
 		AD744E2F8DBABA5DAA77AF3E /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BE0C032C34C4C5C08D8AB5 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		4893268B1C05BB4B009B0256 /* MachineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MachineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4893268F1C05BB4B009B0256 /* MachineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineUITests.swift; sourceTree = "<group>"; };
 		489326911C05BB4B009B0256 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		48F50A671C0F6E6300C74616 /* SingleDayScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleDayScrollView.swift; sourceTree = "<group>"; };
 		F0BE0C032C34C4C5C08D8AB5 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -127,6 +129,7 @@
 				48279AD11C0C6B58003D16A1 /* QRCodeScannerView.swift */,
 				48279AC91C0B371B003D16A1 /* RecordView.swift */,
 				48279AD51C0DC74A003D16A1 /* DetailViewController.swift */,
+				48F50A671C0F6E6300C74616 /* SingleDayScrollView.swift */,
 				489326731C05BB4A009B0256 /* Main.storyboard */,
 				489326761C05BB4B009B0256 /* Assets.xcassets */,
 				489326781C05BB4B009B0256 /* LaunchScreen.storyboard */,
@@ -361,6 +364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48F50A681C0F6E6300C74616 /* SingleDayScrollView.swift in Sources */,
 				489326721C05BB4A009B0256 /* ViewController.swift in Sources */,
 				48279AD21C0C6B58003D16A1 /* QRCodeScannerView.swift in Sources */,
 				48279ACA1C0B371C003D16A1 /* RecordView.swift in Sources */,
