@@ -12,6 +12,7 @@ import KeychainSwift
 import ionicons
 import Hex
 import SwiftLocation
+import Timepiece
 
 class SingleDayScrollView: UIScrollView {
 
@@ -23,7 +24,11 @@ class SingleDayScrollView: UIScrollView {
     var refreshControl = UIRefreshControl()
     var moneyData = []
     var navigationController = UINavigationController()
-
+    var nextDayButton = UIButton()
+    var previousDayButton = UIButton()
+    var todayLabel = UILabel()
+    var currentDate = NSDate()
+    
     init(frame: CGRect, date: NSDate) {
         super.init(frame: frame)
         
@@ -34,15 +39,33 @@ class SingleDayScrollView: UIScrollView {
         refreshControl.tintColor = UIColor.whiteColor()
         self.addSubview(refreshControl)
         
-        let todayLabel = UILabel()
-        todayLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 36)
+        todayLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 24)
         todayLabel.textColor = UIColor(hex: "#ECEFF1")
-        todayLabel.text = date.stringFromFormat("MM/dd")
+        todayLabel.text = date.stringFromFormat("MM/dd\nEEEE")
+        todayLabel.numberOfLines = 0
         todayLabel.sizeToFit()
         //todayLabel.frame = CGRectMake(self.view.frame.size.width/2 - todayLabel.frame.size.width/2, 30, todayLabel.frame.width, todayLabel.frame.height)
         todayLabel.frame = CGRectMake(0, 0, todayLabel.frame.width, todayLabel.frame.height)
         todayLabel.frame.origin.x = self.frame.size.width/2 - todayLabel.frame.width/2
         self.addSubview(todayLabel)
+        currentDate = date
+        
+        nextDayButton.frame = CGRectMake( todayLabel.frame.origin.x + todayLabel.frame.size.width + 2, 0, 44, 44)
+        nextDayButton.titleLabel!.font = IonIcons.fontWithSize(30)
+        nextDayButton.setTitle(ion_ios_arrow_right, forState: .Normal)
+        nextDayButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        nextDayButton.addTarget(self, action: "showNextDay:", forControlEvents: .TouchUpInside)
+        nextDayButton.center.y = todayLabel.center.y
+        nextDayButton.alpha = 0
+        self.addSubview(nextDayButton)
+        
+        previousDayButton.frame = CGRectMake( todayLabel.frame.origin.x - 46, 0, 44, 44)
+        previousDayButton.titleLabel!.font = IonIcons.fontWithSize(30)
+        previousDayButton.setTitle(ion_ios_arrow_left, forState: .Normal)
+        previousDayButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        previousDayButton.center.y = todayLabel.center.y
+        previousDayButton.addTarget(self, action: "showPreviousDay:", forControlEvents: .TouchUpInside)
+        self.addSubview(previousDayButton)
         
         transparentView = UIView(frame: CGRectMake(0, self.frame.height - 80, self.frame.width, 80))
         transparentView.backgroundColor = UIColor(hex: "263238")
@@ -60,7 +83,7 @@ class SingleDayScrollView: UIScrollView {
         
         let todayOverAllLable: UILabel
         todayOverAllLable = UILabel()
-        todayOverAllLable.text = "今日花費"
+        todayOverAllLable.text = "總花費"
         todayOverAllLable.font = UIFont(name: "HelveticaNeue", size: 18)
         todayOverAllLable.sizeToFit()
         //todayPercentLabel.center = circleCenter
@@ -115,13 +138,36 @@ class SingleDayScrollView: UIScrollView {
         })
     }
     
+    func showNextDay(sender: UIButton) {
+        self.currentDate = self.currentDate + 1.day
+        UIView.animateWithDuration(0.3, animations: {
+            self.todayLabel.text = self.currentDate.stringFromFormat("MM/dd\nEEEE")
+            if (self.currentDate.stringFromFormat("yyyy-MM-dd") == NSDate().stringFromFormat("yyyy-MM-dd")) {
+                self.nextDayButton.alpha = 0
+            }
+        })
+        self.getTodayData()
+    }
+    
+    func showPreviousDay(sender: UIButton) {
+        self.currentDate = self.currentDate - 1.day
+        UIView.animateWithDuration(0.3, animations: {
+            self.todayLabel.text = self.currentDate.stringFromFormat("MM/dd\nEEEE")
+            if (self.currentDate.stringFromFormat("yyyy-MM-dd") != NSDate().stringFromFormat("yyyy-MM-dd")) {
+                self.nextDayButton.alpha = 1
+            }
+        })
+        self.getTodayData()
+    }
+    
     func getTodayData() {
         let keychain = KeychainSwift()
         let headers = [
             "x-access-token": keychain.get("token")!
         ]
         
-        Alamofire.request(.GET, "http://140.115.26.17:3000/api/history/today", headers: headers)
+        
+        Alamofire.request(.GET, "http://140.115.26.17:3000/api/history/date/\(currentDate.stringFromFormat("yyyy-MM-dd"))", headers: headers)
             .responseJSON{
                 response in switch response.result {
                 case .Success(let JSON):

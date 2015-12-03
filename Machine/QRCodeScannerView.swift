@@ -20,6 +20,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
     var rightCode = false
     var scanData = NSMutableArray()
     var captureSession = AVCaptureSession()
+    var attentionLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,6 +45,10 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
         view.layer.addSublayer(previewLayer)
         self.addSubview(view)
     
+        let transparentView = UIView(frame: CGRectMake( 0, 0, self.frame.width, 80))
+        transparentView.backgroundColor = UIColor.darkGrayColor()
+        transparentView.alpha = 0.7
+        self.addSubview(transparentView)
         
         let clearButton: UIButton
         clearButton = UIButton()
@@ -55,6 +60,14 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
         clearButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         clearButton.addTarget(self, action: "cancelView:", forControlEvents: .TouchUpInside)
         self.addSubview(clearButton)
+        
+        attentionLabel.text = "請將發票至於螢幕中央"
+        attentionLabel.textColor = UIColor(hex: "ECEFF1")
+        attentionLabel.font  = UIFont(name: "HelveticaNeue-UltraLight", size: 16)
+        attentionLabel.sizeToFit()
+        attentionLabel.center = self.center
+        attentionLabel.center.y = clearButton.center.y
+        self.addSubview(attentionLabel)
         
         let outPut = AVCaptureMetadataOutput()
         captureSession.addOutput(outPut)
@@ -93,6 +106,9 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                     if (items.count%3 == 0) {
                         rightCode = true
                         scanData.addObjectsFromArray(items as [AnyObject])
+                        attentionLabel.text = "請稍微靠左，掃描左方QR Code"
+                        attentionLabel.sizeToFit()
+                        attentionLabel.center.x = self.center.x
                     }
                 } else if (!leftCode && metadataObj.stringValue.substringToIndex(index) != "**" ) {
                     items = NSMutableArray(array: metadataObj.stringValue.componentsSeparatedByString(":"))
@@ -105,7 +121,9 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                     if (items.count%3 == 0) {
                         leftCode = true
                         scanData.addObjectsFromArray(items as [AnyObject])
-                        print(items)
+                        attentionLabel.text = "請稍微靠右，掃描右方QR Code"
+                        attentionLabel.sizeToFit()
+                        attentionLabel.center.x = self.center.x
                     }
                 }
             }

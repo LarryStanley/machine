@@ -136,7 +136,7 @@ class DetailViewController: UIViewController {
         ]
         
         
-        Alamofire.request(.DELETE, "http://140.115.26.17:3000/api/delete", parameters: data,headers: headers)
+        Alamofire.request(.POST, "http://140.115.26.17:3000/api/delete", parameters: data,headers: headers)
             .responseJSON{
                 response in switch response.result {
                 case .Success(let JSON):
