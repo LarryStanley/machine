@@ -10,8 +10,9 @@ import UIKit
 import Timepiece
 import ionicons
 import Hex
+import Material
 
-class SingleItemView: UIButton {
+class SingleItemView: FlatButton {
     
     var allLabel:[UILabel] = []
     var superNavigationController = UINavigationController()
@@ -66,8 +67,8 @@ class SingleItemView: UIButton {
         allLabel.append(amountLabel)
         
         self.addTarget(self, action: "showDetailViews", forControlEvents: .TouchUpInside)
-        self.addTarget(self, action: "showPressAnimation", forControlEvents: .TouchDown)
-        self.addTarget(self, action: "returnToOriginal", forControlEvents: .TouchUpOutside)
+        /*self.addTarget(self, action: "showPressAnimation", forControlEvents: .TouchDown)
+        self.addTarget(self, action: "returnToOriginal", forControlEvents: .TouchUpOutside)*/
         
         itemData = allData
     }
