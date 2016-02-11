@@ -14,6 +14,10 @@ import KeychainSwift
 import Alamofire
 import Hex
 
+protocol RecordViewFinishDelegate {
+    func recordFinish(view: RecordView)
+}
+
 class RecordView: UIView, UITextFieldDelegate {
     
     var itemField = UITextField()
@@ -22,6 +26,7 @@ class RecordView: UIView, UITextFieldDelegate {
     var textButton = UIButton()
     var currentStat = "text"
     var recordButton = UIButton()
+    var delegate:RecordViewFinishDelegate! = nil
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -144,6 +149,7 @@ class RecordView: UIView, UITextFieldDelegate {
                                 self.alpha = 0
                                 }, completion: { finished in
                                     self.removeFromSuperview()
+                                    self.delegate!.recordFinish(self)
                             })
                             print (JSON)
                         case .Failure(let error):

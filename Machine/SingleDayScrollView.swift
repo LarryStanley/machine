@@ -14,7 +14,7 @@ import Hex
 import SwiftLocation
 import Timepiece
 
-class SingleDayScrollView: UIScrollView {
+class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate {
 
     var todayPercentLabel = UILabel()
     var transparentView = UIView()
@@ -123,6 +123,7 @@ class SingleDayScrollView: UIScrollView {
     func showTextRecord(sender: UIButton) {
         let textRecordView = RecordView(frame: self.frame)
         textRecordView.alpha = 0;
+        textRecordView.delegate = self
         self.superview!.addSubview(textRecordView)
         UIView.animateWithDuration(0.3, animations: {
             textRecordView.alpha = 1
@@ -202,6 +203,11 @@ class SingleDayScrollView: UIScrollView {
                 }
         }
         
+    }
+    
+    func recordFinish(view: RecordView) {
+        print("yes")
+        self.getTodayData()
     }
     
     required init?(coder aDecoder: NSCoder) {
