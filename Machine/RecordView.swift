@@ -19,7 +19,7 @@ protocol RecordViewFinishDelegate {
     func recordFinish(view: RecordView)
 }
 
-class RecordView: UIView, UITextFieldDelegate {
+class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
     var itemField = UITextField()
     var amountField = UITextField()
@@ -28,7 +28,9 @@ class RecordView: UIView, UITextFieldDelegate {
     var currentStat = "text"
     var recordButton = FlatButton()
     var delegate:RecordViewFinishDelegate! = nil
-
+    var autoCompleteTable = UITableView()
+    var autoCompleteData = NSArray()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -62,13 +64,15 @@ class RecordView: UIView, UITextFieldDelegate {
         itemBorder.frame = CGRect(x: 0, y: 44 - width, width:  self.frame.width - 60, height: 44)
         itemBorder.borderWidth = width
         
-        itemField = UITextField(frame: CGRectMake(30, clearButton.frame.height + clearButton.frame.origin.y + 30, self.frame.size.width - 60, 44))
+        itemField = UITextField(frame: CGRectMake(30, clearButton.frame.height + clearButton.frame.origin.y + 15, self.frame.size.width - 60, 44))
         itemField.placeholder = "品項"
         itemField.layer.addSublayer(itemBorder)
         itemField.layer.masksToBounds = true
         itemField.delegate = self
         itemField.returnKeyType = .Done
         itemField.textColor = UIColor(hex: "#ECEFF1")
+        itemField.tag = 1
+        itemField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         itemField.attributedPlaceholder = NSAttributedString(string:"品項", attributes:[NSForegroundColorAttributeName: UIColor(hex: "#B0BEC5")])
         self.addSubview(itemField)
         
@@ -107,6 +111,8 @@ class RecordView: UIView, UITextFieldDelegate {
         })
     }
     
+    // MARK: text field delegate
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         let color = CABasicAnimation(keyPath: "borderColor")
         color.fromValue = textField.layer.borderColor
@@ -114,11 +120,87 @@ class RecordView: UIView, UITextFieldDelegate {
         color.duration = 2
         color.repeatCount = 1
         textField.layer.addAnimation(color, forKey: "borderColor")
+        
+        if (textField.tag == 1) {
+            autoCompleteTable = UITableView(frame: CGRectMake(30, itemField.frame.size.height + itemField.frame.origin.y, self.frame.size.width - 60, 0))
+            autoCompleteTable.delegate = self
+            autoCompleteTable.dataSource = self
+            autoCompleteTable.backgroundColor = UIColor.clearColor()
+            self.addSubview(autoCompleteTable)
+        }
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        if let name = textField.text {
+            
+            if (name.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 ) {
+                let keychain = KeychainSwift()
+                let headers = [
+                    "x-access-token": keychain.get("token")!
+                ]
+                
+                let url = "http://140.115.26.17:3000/api/predict/autoComplete/\(name)"
+                Alamofire.request(.GET, url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!, headers: headers)
+                    .responseJSON{
+                        response in switch response.result {
+                        case .Success(let JSON):
+                            self.autoCompleteData = JSON as! NSArray
+                            self.autoCompleteTable.frame = CGRectMake(self.autoCompleteTable.frame.origin.x, self.autoCompleteTable.frame.origin.y, self.autoCompleteTable.frame.size.width, 44 * CGFloat(self.autoCompleteData.count) )
+                            self.autoCompleteTable.reloadData()
+                        case .Failure(let error):
+                            print("Request failed with error: \(error)")
+                        }
+                }
+            } else {
+                autoCompleteData = NSArray()
+                self.autoCompleteTable.frame = CGRectMake(self.autoCompleteTable.frame.origin.x, self.autoCompleteTable.frame.origin.y, self.autoCompleteTable.frame.size.width, 44 * CGFloat(self.autoCompleteData.count) )
+                autoCompleteTable.reloadData()
+            }
+        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        if (textField.tag == 1) {
+            UIView.animateWithDuration(0.3, animations: {
+                self.autoCompleteTable.alpha = 0
+                }, completion: { finished in
+                    self.autoCompleteTable.removeFromSuperview()
+            })
+        }
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        
+        if (textField.tag == 1) {
+            UIView.animateWithDuration(0.3, animations: {
+                self.autoCompleteTable.alpha = 0
+                }, completion: { finished in
+                    self.autoCompleteTable.removeFromSuperview()
+            })
+        }
+        
         return true
+    }
+    
+    // MARK: auto complete datasource and delegate
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return autoCompleteData.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "Cell")
+        
+        cell.textLabel!.text = autoCompleteData.objectAtIndex(indexPath.row) as? String
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        itemField.text = autoCompleteData.objectAtIndex(indexPath.row) as? String
+        autoCompleteData = NSArray()
+        self.autoCompleteTable.frame = CGRectMake(self.autoCompleteTable.frame.origin.x, self.autoCompleteTable.frame.origin.y, self.autoCompleteTable.frame.size.width, 44 * CGFloat(self.autoCompleteData.count) )
+        autoCompleteTable.reloadData()
     }
     
     func recordData(sender: UIButton) {
