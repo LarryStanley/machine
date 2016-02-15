@@ -13,10 +13,15 @@ import KeychainSwift
 import Alamofire
 import MapKit
 
+protocol DetailViewDelegate {
+    func deleteFinish(ViewController: DetailViewController)
+}
+
 class DetailViewController: UIViewController {
     var itemData:NSDictionary = NSDictionary()
     var mainScrollView = UIScrollView()
     var transparentView = UIView()
+    var delegate:DetailViewDelegate! = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,6 +146,7 @@ class DetailViewController: UIViewController {
                 response in switch response.result {
                 case .Success(let JSON):
                     self.navigationController!.popViewControllerAnimated(true)
+                    self.delegate!.deleteFinish(self)
                     print (JSON)
                 case .Failure(let error):
                     print("Request failed with error: \(error)")

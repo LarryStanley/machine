@@ -14,7 +14,7 @@ import Hex
 import SwiftLocation
 import Timepiece
 
-class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate {
+class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDelegate, SingleItemViewDelegate{
 
     var todayPercentLabel = UILabel()
     var transparentView = UIView()
@@ -130,13 +130,22 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate {
         })
     }
     
+    func recordFinish(view: RecordView) {
+        self.getTodayData()
+    }
+    
     func showCodeRecord(sender: UIButton) {
         let codeRecordView = QRCodeScannerView(frame: self.frame)
         codeRecordView.alpha = 0
+        codeRecordView.delegate = self
         self.superview!.addSubview(codeRecordView)
         UIView.animateWithDuration(0.3, animations: {
             codeRecordView.alpha = 1
         })
+    }
+    
+    func CodeRecordFinish(view: QRCodeScannerView) {
+        self.getTodayData()
     }
     
     func showNextDay(sender: UIButton) {
@@ -189,6 +198,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate {
                     for item in self.moneyData.reverse() {
                         let singleView = SingleItemView(frame: CGRectMake(0, lastY, self.frame.size.width, 70), time: item["time"]! as! String, item: item["item"]! as! String, amount: item["amount"]! as! Int, navigationController: self.navigationController, allData: item as! NSDictionary)
                         self.transparentView.addSubview(singleView)
+                        singleView.updateDelegate = self
                         lastHeight = singleView.frame.size.height + singleView.frame.origin.y
                         lastY = lastHeight
                         self.allItems.addObject(singleView)
@@ -205,8 +215,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate {
         
     }
     
-    func recordFinish(view: RecordView) {
-        print("yes")
+    func updateData(view: SingleItemView) {
         self.getTodayData()
     }
     

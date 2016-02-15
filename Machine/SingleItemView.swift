@@ -12,13 +12,17 @@ import ionicons
 import Hex
 import Material
 
-class SingleItemView: FlatButton {
+protocol SingleItemViewDelegate {
+    func updateData(view:SingleItemView)
+}
+
+class SingleItemView: FlatButton,  DetailViewDelegate{
     
     var allLabel:[UILabel] = []
     var superNavigationController = UINavigationController()
     var circleLabel = UILabel()
-
     var itemData = NSDictionary()
+    var updateDelegate:SingleItemViewDelegate! = nil
     
     init(frame: CGRect, time: String, item: String, amount: Int, navigationController: UINavigationController, allData: NSDictionary) {
         super.init(frame: frame)
@@ -109,7 +113,12 @@ class SingleItemView: FlatButton {
         
         let detailViewController = DetailViewController()
         detailViewController.itemData = itemData
+        detailViewController.delegate = self
         superNavigationController.pushViewController(detailViewController, animated: true)
+    }
+    
+    func deleteFinish(ViewController: DetailViewController) {
+        self.updateDelegate!.updateData(self)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -14,6 +14,10 @@ import SwiftLocation
 import Alamofire
 import CoreLocation
 
+protocol QRCodeViewDelegate {
+    func CodeRecordFinish(view: QRCodeScannerView)
+}
+
 class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
     
     var leftCode = false
@@ -21,6 +25,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
     var scanData = NSMutableArray()
     var captureSession = AVCaptureSession()
     var attentionLabel = UILabel()
+    var delegate:QRCodeViewDelegate! = nil
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -197,6 +202,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                                                 self.alpha = 0
                                                 }, completion: { finished in
                                                     self.removeFromSuperview()
+                                                    self.delegate!.CodeRecordFinish(self)
                                             })
                                             print (JSON)
                                         case .Failure(let error):
