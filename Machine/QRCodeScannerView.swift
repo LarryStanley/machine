@@ -142,7 +142,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                 print(scanData)
                 
                 do {
-                    try SwiftLocation.shared.currentLocation(Accuracy.Block, timeout: 60, onSuccess: { (location) -> Void in
+                    try SwiftLocation.shared.currentLocation(Accuracy.Neighborhood, timeout: 60, onSuccess: { (location) -> Void in
                         
                         print("1. Location found \(location?.description)")
                         

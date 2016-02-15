@@ -13,6 +13,7 @@ import SwiftLocation
 import KeychainSwift
 import Alamofire
 import Hex
+import Material
 
 protocol RecordViewFinishDelegate {
     func recordFinish(view: RecordView)
@@ -25,7 +26,7 @@ class RecordView: UIView, UITextFieldDelegate {
     var mainView = UIScrollView()
     var textButton = UIButton()
     var currentStat = "text"
-    var recordButton = UIButton()
+    var recordButton = FlatButton()
     var delegate:RecordViewFinishDelegate! = nil
 
     override init(frame: CGRect) {
@@ -87,12 +88,13 @@ class RecordView: UIView, UITextFieldDelegate {
         amountField.attributedPlaceholder = NSAttributedString(string:"價錢", attributes:[NSForegroundColorAttributeName: UIColor(hex: "#B0BEC5")])
         self.addSubview(amountField)
         
-        recordButton = UIButton()
+        recordButton = FlatButton()
         recordButton.setTitle("紀錄", forState: .Normal)
         recordButton.sizeToFit()
         recordButton.frame = CGRectMake( 30, amountField.frame.height + amountField.frame.origin.y + 20, self.frame.size.width - 60, 40)
-        recordButton.backgroundColor = UIColor(red: 214/255, green: 230/255, blue: 229/255, alpha: 1)
-        recordButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        //recordButton.backgroundColor = UIColor(red: 214/255, green: 230/255, blue: 229/255, alpha: 1)
+        recordButton.pulseColor = UIColor(hex: "#eceff1")
+        recordButton.setTitleColor(UIColor(hex: "#B0BEC5"), forState: .Normal)
         recordButton.addTarget(self, action: "recordData:", forControlEvents: .TouchUpInside)
         self.addSubview(recordButton)
     }
@@ -121,48 +123,57 @@ class RecordView: UIView, UITextFieldDelegate {
     
     func recordData(sender: UIButton) {
         do {
-            try SwiftLocation.shared.currentLocation(Accuracy.Block, timeout: 60, onSuccess: { (location) -> Void in
-                
-                print("1. Location found \(location?.description)")
-            
-                let keychain = KeychainSwift()
-                let headers = [
-                    "x-access-token": keychain.get("token")!
-                ]
-            
-                let item = self.itemField.text!
-                let amount = self.amountField.text!
-            
-                let data : [String: AnyObject] = [
-                    "item": item,
-                    "amount": amount,
-                    "latitude": (location?.coordinate.latitude)!,
-                    "longitude": (location?.coordinate.longitude)!,
-                    "category": "飲食"
-                ]
-            
-                Alamofire.request(.POST, "http://140.115.26.17:3000/api/record", parameters: data,headers: headers)
-                    .responseJSON{
-                        response in switch response.result {
-                        case .Success(let JSON):
-                            UIView.animateWithDuration(0.3, animations: {
-                                self.alpha = 0
-                                }, completion: { finished in
-                                    self.removeFromSuperview()
-                                    self.delegate!.recordFinish(self)
-                            })
-                            print (JSON)
-                        case .Failure(let error):
-                            print("Request failed with error: \(error)")
-                        }
-                }
+            let item = self.itemField.text!
+            let amount = self.amountField.text!
 
-                }) { (error) -> Void in
+            if (item.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 && amount.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+                sender.enabled = false
+                sender.setTitle("紀錄中...", forState: .Normal)
+                recordButton.pulse()
+                try SwiftLocation.shared.currentLocation(Accuracy.Neighborhood, timeout: 20, onSuccess: { (location) -> Void in
                     
-                    print("1. Something went wrong -> \(error?.localizedDescription)")
+                    print("1. Location found \(location?.description)")
+                    
+                    let keychain = KeychainSwift()
+                    let headers = [
+                        "x-access-token": keychain.get("token")!
+                    ]
+                    
+                    let data : [String: AnyObject] = [
+                        "item": item,
+                        "amount": amount,
+                        "latitude": (location?.coordinate.latitude)!,
+                        "longitude": (location?.coordinate.longitude)!,
+                        "category": "飲食"
+                    ]
+                    
+                    Alamofire.request(.POST, "http://140.115.26.17:3000/api/record", parameters: data,headers: headers)
+                        .responseJSON{
+                            response in switch response.result {
+                            case .Success(let JSON):
+                                UIView.animateWithDuration(0.3, animations: {
+                                    self.alpha = 0
+                                    }, completion: { finished in
+                                        self.removeFromSuperview()
+                                        self.delegate!.recordFinish(self)
+                                })
+                                print (JSON)
+                            case .Failure(let error):
+                                print("Request failed with error: \(error)")
+                            }
+                    }
+                    
+                    }) { (error) -> Void in
+                        print("1. Something went wrong -> \(error?.localizedDescription)")
+                        self.recordButton.enabled = true
+                        self.recordButton.setTitle("紀錄", forState: .Normal)
+                }
             }
+            
         } catch (let error) {
             print("Error \(error)")
+            sender.enabled = true
+            sender.setTitle("紀錄", forState: .Normal)
         }
 
     }

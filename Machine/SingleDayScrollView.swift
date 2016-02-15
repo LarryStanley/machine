@@ -13,6 +13,7 @@ import ionicons
 import Hex
 import SwiftLocation
 import Timepiece
+import Material
 
 class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDelegate, SingleItemViewDelegate{
 
@@ -24,8 +25,8 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
     var refreshControl = UIRefreshControl()
     var moneyData = []
     var navigationController = UINavigationController()
-    var nextDayButton = UIButton()
-    var previousDayButton = UIButton()
+    var nextDayButton = FlatButton()
+    var previousDayButton = FlatButton()
     var todayLabel = UILabel()
     var currentDate = NSDate()
     
@@ -97,16 +98,16 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         unitLabel.textColor = UIColor.whiteColor()
         self.addSubview(unitLabel)
         
-        let textButton = UIButton()
-        textButton.frame = CGRectMake( self.bounds.width/2 - 54, 5, 44, 44)
+        let textButton = FlatButton()
+        textButton.frame = CGRectMake( self.bounds.width/2 - 75, 5, 65, 44)
         textButton.titleLabel!.font = IonIcons.fontWithSize(40)
         textButton.setTitle(ion_ios_compose_outline, forState: .Normal)
         textButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         textButton.addTarget(self, action: "showTextRecord:", forControlEvents: .TouchUpInside)
         transparentView.addSubview(textButton)
         
-        let qrCodeButton = UIButton()
-        qrCodeButton.frame = CGRectMake( self.bounds.width/2 + 10, 5, 44, 44)
+        let qrCodeButton = FlatButton()
+        qrCodeButton.frame = CGRectMake( self.bounds.width/2 + 10, 5, 65, 44)
         qrCodeButton.titleLabel!.font = IonIcons.fontWithSize(40)
         qrCodeButton.setTitle(ion_ios_barcode_outline, forState: .Normal)
         qrCodeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
