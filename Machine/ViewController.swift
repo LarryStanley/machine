@@ -13,11 +13,14 @@ import KeychainSwift
 import ionicons
 import Hex
 import SwiftLocation
+import Material
 
 class ViewController: UIViewController {
     
     var accountField: UITextField = UITextField()
     var passwordField: UITextField = UITextField()
+    
+    private var modeMenu: Menu!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,6 +124,47 @@ class ViewController: UIViewController {
         let singleDay = SingleDayScrollView(frame: self.view.frame, date: NSDate())
         singleDay.navigationController = self.navigationController!
         self.view.addSubview(singleDay)
+        
+        let modeButton: FlatButton = FlatButton()
+        modeButton.titleLabel!.font = IonIcons.fontWithSize(30)
+        modeButton.setTitle(ion_ios_more_outline, forState: .Normal)
+        modeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        modeButton.addTarget(self, action: "handleModeMenu", forControlEvents: .TouchUpInside)
+        modeButton.pulseColor = MaterialColor.white
+        self.view.addSubview(modeButton)
+        
+        let dayButton: FlatButton = FlatButton()
+        dayButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        dayButton.borderColor = MaterialColor.white
+        dayButton.pulseColor = MaterialColor.white
+        dayButton.borderWidth = 0.5
+        dayButton.setTitle("天", forState: .Normal)
+        view.addSubview(dayButton)
+        
+        let weekButton: FlatButton = FlatButton()
+        weekButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        weekButton.borderColor = MaterialColor.white
+        weekButton.pulseColor = MaterialColor.white
+        weekButton.borderWidth = 0.5
+        weekButton.setTitle("週", forState: .Normal)
+        view.addSubview(weekButton)
+        
+        modeMenu = Menu(origin: CGPointMake(self.view.frame.size.width - 65, 20))
+        modeMenu.direction = .Down
+        modeMenu.spacing = 8
+        modeMenu.itemViewSize = CGSizeMake(60, 44)
+        modeMenu.views = [modeButton, dayButton, weekButton]
+    }
+    
+    internal func handleModeMenu() {
+        // Only trigger open and close animations when enabled.
+        if modeMenu.enabled {
+            if modeMenu.opened {
+                modeMenu.close()
+            } else {
+                modeMenu.open()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {

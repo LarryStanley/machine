@@ -169,17 +169,31 @@ public class MaterialButton : UIButton {
 		}
 	}
 	
+	/// A property that accesses the backing layer's shadowPath.
+	public var shadowPath: CGPath? {
+		get {
+			return layer.shadowPath
+		}
+		set(value) {
+			layer.shadowPath = value
+		}
+	}
+	
+	/// Enables automatic shadowPath sizing.
+	public var shadowPathAutoSizeEnabled: Bool = false
+	
 	/**
 	A property that sets the shadowOffset, shadowOpacity, and shadowRadius
 	for the backing layer. This is the preferred method of setting depth
 	in order to maintain consitency across UI objects.
 	*/
-	public var depth: MaterialDepth {
+	public var depth: MaterialDepth = .None {
 		didSet {
 			let value: MaterialDepthType = MaterialDepthToValue(depth)
 			shadowOffset = value.offset
 			shadowOpacity = value.opacity
 			shadowRadius = value.radius
+			layoutShadowPath()
 		}
 	}
 	
@@ -188,13 +202,24 @@ public class MaterialButton : UIButton {
 	property has a value of .Circle when the cornerRadius is set, it will
 	become .None, as it no longer maintains its circle shape.
 	*/
-	public var cornerRadius: MaterialRadius {
+	public var cornerRadiusPreset: MaterialRadius = .None {
 		didSet {
-			if let v: MaterialRadius = cornerRadius {
-				layer.cornerRadius = MaterialRadiusToValue(v)
-				if .Circle == shape {
-					shape = .None
-				}
+			if let v: MaterialRadius = cornerRadiusPreset {
+				cornerRadius = MaterialRadiusToValue(v)
+			}
+		}
+	}
+	
+	/// A property that accesses the layer.cornerRadius.
+	public var cornerRadius: CGFloat {
+		get {
+			return layer.cornerRadius
+		}
+		set(value) {
+			layer.cornerRadius = value
+			layoutShadowPath()
+			if .Circle == shape {
+				shape = .None
 			}
 		}
 	}
@@ -204,7 +229,7 @@ public class MaterialButton : UIButton {
 	width or height property is set, the other will be automatically adjusted
 	to maintain the shape of the object.
 	*/
-	public var shape: MaterialShape {
+	public var shape: MaterialShape = .None {
 		didSet {
 			if .None != shape {
 				if width < height {
@@ -212,24 +237,35 @@ public class MaterialButton : UIButton {
 				} else {
 					frame.size.height = width
 				}
+				layoutShadowPath()
 			}
 		}
 	}
 	
-	/**
-	A property that accesses the layer.borderWith using a MaterialBorder
-	enum preset.
-	*/
-	public var borderWidth: MaterialBorder {
+	/// A preset property to set the borderWidth.
+	public var borderWidthPreset: MaterialBorder = .None {
 		didSet {
-			layer.borderWidth = MaterialBorderToValue(borderWidth)
+			borderWidth = MaterialBorderToValue(borderWidthPreset)
+		}
+	}
+	
+	/// A property that accesses the layer.borderWith.
+	public var borderWidth: CGFloat {
+		get {
+			return layer.borderWidth
+		}
+		set(value) {
+			layer.borderWidth = value
 		}
 	}
 	
 	/// A property that accesses the layer.borderColor property.
 	public var borderColor: UIColor? {
-		didSet {
-			layer.borderColor = borderColor?.CGColor
+		get {
+			return nil == layer.borderColor ? nil : UIColor(CGColor: layer.borderColor!)
+		}
+		set(value) {
+			layer.borderColor = value?.CGColor
 		}
 	}
 	
@@ -253,12 +289,10 @@ public class MaterialButton : UIButton {
 		}
 	}
 	
-	/**
-	:name:	contentInsets
-	*/
-	public var contentInsetPreset: MaterialEdgeInsetPreset {
+	/// A preset property for updated contentEdgeInsets.
+	public var contentEdgeInsetsPreset: MaterialEdgeInset {
 		didSet {
-			let value: UIEdgeInsets = MaterialEdgeInsetPresetToValue(contentInsetPreset)
+			let value: UIEdgeInsets = MaterialEdgeInsetToValue(contentEdgeInsetsPreset)
 			contentEdgeInsets = UIEdgeInsetsMake(value.top, value.left, value.bottom, value.right)
 		}
 	}
@@ -268,11 +302,7 @@ public class MaterialButton : UIButton {
 	- Parameter aDecoder: A NSCoder instance.
 	*/
 	public required init?(coder aDecoder: NSCoder) {
-		borderWidth = .None
-		depth = .None
-		shape = .None
-		cornerRadius = .None
-		contentInsetPreset = .None
+		contentEdgeInsetsPreset = .None
 		super.init(coder: aDecoder)
 		prepareView()
 	}
@@ -284,16 +314,12 @@ public class MaterialButton : UIButton {
 	- Parameter frame: A CGRect instance.
 	*/
 	public override init(frame: CGRect) {
-		borderWidth = .None
-		depth = .None
-		shape = .None
-		cornerRadius = .None
-		contentInsetPreset = .None
+		contentEdgeInsetsPreset = .None
 		super.init(frame: frame)
 		prepareView()
 	}
 	
-	/// A convenience initializer that is mostly used with AutoLayout.
+	/// A convenience initializer.
 	public convenience init() {
 		self.init(frame: CGRectNull)
 	}
@@ -304,6 +330,7 @@ public class MaterialButton : UIButton {
 		if self.layer == layer {
 			layoutShape()
 			layoutVisualLayer()
+			layoutShadowPath()
 		}
 	}
 	
@@ -344,12 +371,8 @@ public class MaterialButton : UIButton {
 	if interrupted.
 	*/
 	public override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-		if let a: CAPropertyAnimation = anim as? CAPropertyAnimation {
-			if let b: CABasicAnimation = a as? CABasicAnimation {
-				layer.setValue(nil == b.toValue ? b.byValue : b.toValue, forKey: b.keyPath!)
-			}
+		if anim is CAPropertyAnimation {
 			(delegate as? MaterialAnimationDelegate)?.materialAnimationDidStop?(anim, finished: flag)
-			layer.removeAnimationForKey(a.keyPath!)
 		} else if let a: CAAnimationGroup = anim as? CAAnimationGroup {
 			for x in a.animations! {
 				animationDidStop(x, finished: true)
@@ -402,8 +425,8 @@ public class MaterialButton : UIButton {
 		}
 		
 		if let v: CFTimeInterval = pulseAnimation(point!) {
-			MaterialAnimation.delay(v) { [unowned self] in
-				self.shrinkAnimation()
+			MaterialAnimation.delay(v) { [weak self] in
+				self?.shrinkAnimation()
 			}
 		}
 	}
@@ -417,10 +440,7 @@ public class MaterialButton : UIButton {
 	*/
 	public func prepareView() {
 		prepareVisualLayer()
-		shadowColor = MaterialColor.black
-		borderColor = MaterialColor.black
 		pulseColor = MaterialColor.white
-		pulseColorOpacity = 0.25
 	}
 	
 	/// Prepares the visualLayer property.
@@ -441,6 +461,19 @@ public class MaterialButton : UIButton {
 	internal func layoutShape() {
 		if .Circle == shape {
 			layer.cornerRadius = width / 2
+		}
+	}
+	
+	/// Sets the shadow path.
+	internal func layoutShadowPath() {
+		if shadowPathAutoSizeEnabled {
+			if .None == self.depth {
+				layer.shadowPath = nil
+			} else if nil == layer.shadowPath {
+				layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).CGPath
+			} else {
+				animate(MaterialAnimation.shadowPath(UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).CGPath, duration: 0))
+			}
 		}
 	}
 	
@@ -479,12 +512,12 @@ public class MaterialButton : UIButton {
 					pulseLayer.hidden = false
 				}
 				pulseLayer.addAnimation(MaterialAnimation.scale(3 * d, duration: t), forKey: nil)
-				MaterialAnimation.delay(t) { [unowned self] in
-					if nil != self.pulseColor && 0 < self.pulseColorOpacity {
+				MaterialAnimation.delay(t) { [weak self] in
+					if nil != self && nil != self!.pulseColor && 0 < self!.pulseColorOpacity {
 						MaterialAnimation.animateWithDuration(t, animations: {
 							pulseLayer.hidden = true
 						}) {
-								pulseLayer.removeFromSuperlayer()
+							pulseLayer.removeFromSuperlayer()
 						}
 					}
 				}
