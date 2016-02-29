@@ -23,7 +23,7 @@ class SingleItemView: FlatButton,  DetailViewDelegate{
     var circleLabel = UILabel()
     var itemData = NSDictionary()
     var updateDelegate:SingleItemViewDelegate! = nil
-    
+        
     init(frame: CGRect, time: String, item: String, amount: Int, navigationController: UINavigationController, allData: NSDictionary) {
         super.init(frame: frame)
         
@@ -76,7 +76,7 @@ class SingleItemView: FlatButton,  DetailViewDelegate{
         
         itemData = allData
     }
-
+   
     func returnToOriginal() {
         UIView.animateWithDuration(0.5, animations: {
             self.backgroundColor = UIColor.clearColor()

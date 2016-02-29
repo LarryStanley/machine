@@ -34,6 +34,8 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.backgroundColor = UIColor.blackColor()
+        
         let colorTop = UIColor(red: 33/255.0, green: 121/255.0, blue: 122/255.0, alpha: 1.0).CGColor
         let colorBottom = UIColor(red: 136/255.0, green: 158/255.0, blue: 138/255.0, alpha: 1.0).CGColor
         

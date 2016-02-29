@@ -139,7 +139,7 @@ class ViewController: UIViewController {
         dayButton.pulseColor = MaterialColor.white
         dayButton.borderWidth = 0.5
         dayButton.setTitle("天", forState: .Normal)
-        view.addSubview(dayButton)
+        self.view.addSubview(dayButton)
         
         let weekButton: FlatButton = FlatButton()
         weekButton.setTitleColor(MaterialColor.white, forState: .Normal)
@@ -147,13 +147,21 @@ class ViewController: UIViewController {
         weekButton.pulseColor = MaterialColor.white
         weekButton.borderWidth = 0.5
         weekButton.setTitle("週", forState: .Normal)
-        view.addSubview(weekButton)
+        self.view.addSubview(weekButton)
+        
+        let monthButton: FlatButton = FlatButton()
+        monthButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        monthButton.borderColor = MaterialColor.white
+        monthButton.pulseColor = MaterialColor.white
+        monthButton.borderWidth = 0.5
+        monthButton.setTitle("月", forState: .Normal)
+        self.view.addSubview(monthButton)
         
         modeMenu = Menu(origin: CGPointMake(self.view.frame.size.width - 65, 20))
         modeMenu.direction = .Down
         modeMenu.spacing = 8
         modeMenu.itemViewSize = CGSizeMake(60, 44)
-        modeMenu.views = [modeButton, dayButton, weekButton]
+        modeMenu.views = [modeButton, dayButton, weekButton, monthButton]
     }
     
     internal func handleModeMenu() {

@@ -119,13 +119,14 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         transparentView.addSubview(lineBetweenDetailView)
         
         self.getTodayData()
+        
     }
-
+    
     func showTextRecord(sender: UIButton) {
         let textRecordView = RecordView(frame: self.frame)
         textRecordView.alpha = 0;
         textRecordView.delegate = self
-        self.superview!.addSubview(textRecordView)
+        self.window!.addSubview(textRecordView)
         UIView.animateWithDuration(0.3, animations: {
             textRecordView.alpha = 1
         })
@@ -139,7 +140,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         let codeRecordView = QRCodeScannerView(frame: self.frame)
         codeRecordView.alpha = 0
         codeRecordView.delegate = self
-        self.superview!.addSubview(codeRecordView)
+        self.window!.addSubview(codeRecordView)
         UIView.animateWithDuration(0.3, animations: {
             codeRecordView.alpha = 1
         })
