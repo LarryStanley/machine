@@ -1,12 +1,12 @@
 PODS:
-  - Alamofire (3.2.1)
+  - Alamofire (3.4.1)
   - Google-Material-Design-Icons-Swift (1.0.1)
   - Hex (3.0.0)
   - ionicons (2.0.3)
-  - KeychainSwift (3.0.11)
-  - Material (1.34.10)
-  - SwiftLocation (0.2.0)
-  - Timepiece (0.4.2)
+  - KeychainSwift (3.0.16)
+  - Material (1.42.7)
+  - SwiftLocation (0.9.0)
+  - Timepiece (0.4.3)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
@@ -19,13 +19,15 @@ DEPENDENCIES:
   - Timepiece
 
 SPEC CHECKSUMS:
-  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
   Google-Material-Design-Icons-Swift: ff587db57d713061f66b8457229d1af2cae84c56
   Hex: ee430da9c4412d9196366ae5327f279021dc03eb
   ionicons: ec1e86e6c3316bd9942a7f024080dd75c70dd6a5
-  KeychainSwift: 0a4214c910423543a42b0f30f25987d46178b6a5
-  Material: 20006d45c0deb9ae78cad95c9e2b71309f67ec29
-  SwiftLocation: ea78ae4a822581bde7379d98c8513273723c8840
-  Timepiece: cf53bb908bf542acc0e3d5f69cabfed869df4ebd
+  KeychainSwift: a5bb85cd498ce2217b55e055ec59e9268d83384c
+  Material: 2d46a44719b1f19e52956518af8aea54ac714963
+  SwiftLocation: f18e71300a89f2a81001c9615b7694150e6b84de
+  Timepiece: b5038887b91d6eb70653173f4270e06b3abeac41
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: f8bbe9203fbe4a2175f95732327a504a33e55843
+
+COCOAPODS: 1.0.0.beta.6
