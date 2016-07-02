@@ -87,7 +87,7 @@ class ViewController: UIViewController {
         loginButton.frame = CGRectMake( 30, passwordField.frame.height + passwordField.frame.origin.y + 20, self.view.frame.size.width - 60, 40)
         loginButton.backgroundColor = UIColor(hex: "ECEFF1")
         loginButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        loginButton.addTarget(self, action: "processLogin:", forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(ViewController.processLogin(_:)), forControlEvents: .TouchUpInside)
         self.view.addSubview(loginButton)
     }
     
@@ -125,43 +125,7 @@ class ViewController: UIViewController {
         singleDay.navigationController = self.navigationController!
         self.view.addSubview(singleDay)
         
-        let modeButton: FlatButton = FlatButton()
-        modeButton.titleLabel!.font = IonIcons.fontWithSize(30)
-        modeButton.setTitle(ion_ios_more_outline, forState: .Normal)
-        modeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        modeButton.addTarget(self, action: "handleModeMenu", forControlEvents: .TouchUpInside)
-        modeButton.pulseColor = MaterialColor.white
-        self.view.addSubview(modeButton)
         
-        let dayButton: FlatButton = FlatButton()
-        dayButton.setTitleColor(MaterialColor.white, forState: .Normal)
-        dayButton.borderColor = MaterialColor.white
-        dayButton.pulseColor = MaterialColor.white
-        dayButton.borderWidth = 0.5
-        dayButton.setTitle("天", forState: .Normal)
-        self.view.addSubview(dayButton)
-        
-        let weekButton: FlatButton = FlatButton()
-        weekButton.setTitleColor(MaterialColor.white, forState: .Normal)
-        weekButton.borderColor = MaterialColor.white
-        weekButton.pulseColor = MaterialColor.white
-        weekButton.borderWidth = 0.5
-        weekButton.setTitle("週", forState: .Normal)
-        self.view.addSubview(weekButton)
-        
-        let monthButton: FlatButton = FlatButton()
-        monthButton.setTitleColor(MaterialColor.white, forState: .Normal)
-        monthButton.borderColor = MaterialColor.white
-        monthButton.pulseColor = MaterialColor.white
-        monthButton.borderWidth = 0.5
-        monthButton.setTitle("月", forState: .Normal)
-        self.view.addSubview(monthButton)
-        
-        modeMenu = Menu(origin: CGPointMake(self.view.frame.size.width - 65, 20))
-        modeMenu.direction = .Down
-        modeMenu.spacing = 8
-        modeMenu.itemViewSize = CGSizeMake(60, 44)
-        modeMenu.views = [modeButton, dayButton, weekButton, monthButton]
     }
     
     internal func handleModeMenu() {

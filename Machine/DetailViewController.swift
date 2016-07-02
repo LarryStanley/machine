@@ -89,7 +89,7 @@ class DetailViewController: UIViewController {
         textButton.titleLabel!.font = IonIcons.fontWithSize(40)
         textButton.setTitle(ion_ios_compose_outline, forState: .Normal)
         textButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        textButton.addTarget(self, action: "editTextRecord:", forControlEvents: .TouchUpInside)
+        textButton.addTarget(self, action: #selector(DetailViewController.editTextRecord(_:)), forControlEvents: .TouchUpInside)
         transparentView.addSubview(textButton)
         
         let deleteButton = UIButton()
@@ -97,7 +97,7 @@ class DetailViewController: UIViewController {
         deleteButton.titleLabel!.font = IonIcons.fontWithSize(40)
         deleteButton.setTitle(ion_ios_trash_outline, forState: .Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        deleteButton.addTarget(self, action: "deleteRecord:", forControlEvents: .TouchUpInside)
+        deleteButton.addTarget(self, action: #selector(DetailViewController.deleteRecord(_:)), forControlEvents: .TouchUpInside)
         transparentView.addSubview(deleteButton)
         
         let lineBetweenDetailView = UIView(frame: CGRectMake( 20, deleteButton.frame.origin.y + deleteButton.frame.size.height + 15, self.view.bounds.width - 40, 1));

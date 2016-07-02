@@ -36,7 +36,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         let attributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         let attributedTitle = NSAttributedString(string: "下拉更新", attributes: attributes)
         refreshControl.attributedTitle = attributedTitle
-        refreshControl.addTarget(self, action: "getTodayData", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(SingleDayScrollView.getTodayData), forControlEvents: UIControlEvents.ValueChanged)
         refreshControl.tintColor = UIColor.whiteColor()
         self.addSubview(refreshControl)
         
@@ -55,7 +55,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         nextDayButton.titleLabel!.font = IonIcons.fontWithSize(30)
         nextDayButton.setTitle(ion_ios_arrow_right, forState: .Normal)
         nextDayButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        nextDayButton.addTarget(self, action: "showNextDay:", forControlEvents: .TouchUpInside)
+        nextDayButton.addTarget(self, action: #selector(SingleDayScrollView.showNextDay(_:)), forControlEvents: .TouchUpInside)
         nextDayButton.center.y = todayLabel.center.y
         nextDayButton.alpha = 0
         self.addSubview(nextDayButton)
@@ -65,7 +65,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         previousDayButton.setTitle(ion_ios_arrow_left, forState: .Normal)
         previousDayButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         previousDayButton.center.y = todayLabel.center.y
-        previousDayButton.addTarget(self, action: "showPreviousDay:", forControlEvents: .TouchUpInside)
+        previousDayButton.addTarget(self, action: #selector(SingleDayScrollView.showPreviousDay(_:)), forControlEvents: .TouchUpInside)
         self.addSubview(previousDayButton)
         
         transparentView = UIView(frame: CGRectMake(0, self.frame.height - 80, self.frame.width, 80))
@@ -103,7 +103,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         textButton.titleLabel!.font = IonIcons.fontWithSize(40)
         textButton.setTitle(ion_ios_compose_outline, forState: .Normal)
         textButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        textButton.addTarget(self, action: "showTextRecord:", forControlEvents: .TouchUpInside)
+        textButton.addTarget(self, action: #selector(SingleDayScrollView.showTextRecord(_:)), forControlEvents: .TouchUpInside)
         transparentView.addSubview(textButton)
         
         let qrCodeButton = FlatButton()
@@ -111,7 +111,7 @@ class SingleDayScrollView: UIScrollView, RecordViewFinishDelegate, QRCodeViewDel
         qrCodeButton.titleLabel!.font = IonIcons.fontWithSize(40)
         qrCodeButton.setTitle(ion_ios_barcode_outline, forState: .Normal)
         qrCodeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        qrCodeButton.addTarget(self, action: "showCodeRecord:", forControlEvents: .TouchUpInside)
+        qrCodeButton.addTarget(self, action: #selector(SingleDayScrollView.showCodeRecord(_:)), forControlEvents: .TouchUpInside)
         transparentView.addSubview(qrCodeButton)
         
         lineBetweenDetailView = UIView(frame: CGRectMake( 20, textButton.frame.origin.y + textButton.frame.size.height + 15, self.bounds.width - 40, 1));

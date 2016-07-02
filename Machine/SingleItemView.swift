@@ -70,7 +70,7 @@ class SingleItemView: FlatButton,  DetailViewDelegate{
         self.addSubview(amountLabel)
         allLabel.append(amountLabel)
         
-        self.addTarget(self, action: "showDetailViews", forControlEvents: .TouchUpInside)
+        self.addTarget(self, action: #selector(SingleItemView.showDetailViews), forControlEvents: .TouchUpInside)
         /*self.addTarget(self, action: "showPressAnimation", forControlEvents: .TouchDown)
         self.addTarget(self, action: "returnToOriginal", forControlEvents: .TouchUpOutside)*/
         

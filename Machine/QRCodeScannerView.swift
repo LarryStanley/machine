@@ -63,7 +63,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
         clearButton.titleLabel?.font = IonIcons.fontWithSize(50)
         clearButton.setTitle(ion_ios_close_empty, forState: .Normal)
         clearButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        clearButton.addTarget(self, action: "cancelView:", forControlEvents: .TouchUpInside)
+        clearButton.addTarget(self, action: #selector(QRCodeScannerView.cancelView(_:)), forControlEvents: .TouchUpInside)
         self.addSubview(clearButton)
         
         attentionLabel.text = "請將發票至於螢幕中央"
@@ -118,7 +118,7 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                 } else if (!leftCode && metadataObj.stringValue.substringToIndex(index) != "**" ) {
                     items = NSMutableArray(array: metadataObj.stringValue.componentsSeparatedByString(":"))
                     if (items.count >= 4) {
-                        for (var i = 0; i < 5; i++) {
+                        for (var i = 0; i < 5; i += 1) {
                             items.removeObjectAtIndex(0)
                         }
                     }
@@ -141,10 +141,40 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                 captureSession.removeOutput(currentCameraOutput)
                 print(scanData)
                 
-                do {
-                    try SwiftLocation.shared.currentLocation(Accuracy.Neighborhood, timeout: 60, onSuccess: { (location) -> Void in
+                LocationManager.shared.observeLocations(.Block, frequency: .OneShot, onSuccess: { (location) -> Void in
                         
-                        print("1. Location found \(location?.description)")
+                    print("1. Location found \(location.description)")
+                    
+                    let keychain = KeychainSwift()
+                    let headers = [
+                        "x-access-token": keychain.get("token")!
+                    ]
+                    
+                    for (var i = 0; i < self.scanData.count; i = i + 3) {
+                        let count:Int? = Int((self.scanData[i+1] as! String).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
+                        let amount:Int? = Int((self.scanData[i+2] as! String).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
+                        let data : [String: AnyObject] = [
+                            "item": self.scanData[i],
+                            "amount": count!*amount!,
+                            "latitude": (location.coordinate.latitude),
+                            "longitude": (location.coordinate.longitude),
+                            "category": "飲食"
+                        ]
+                        
+                        Alamofire.request(.POST, "http://140.115.26.17:3000/api/record", parameters: data, headers: headers)
+                            .responseJSON{
+                                response in switch response.result {
+                                case .Success(let JSON):
+                                    self.removeFromSuperview()
+                                    print (JSON)
+                                case .Failure(let error):
+                                    print("Request failed with error: \(error)")
+                                }
+                        }
+                    }
+                    
+                    }) { (error) -> Void in
+                        
                         
                         let keychain = KeychainSwift()
                         let headers = [
@@ -157,8 +187,8 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                             let data : [String: AnyObject] = [
                                 "item": self.scanData[i],
                                 "amount": count!*amount!,
-                                "latitude": (location?.coordinate.latitude)!,
-                                "longitude": (location?.coordinate.longitude)!,
+                                "latitude": "0.00",
+                                "longitude": "0.00",
                                 "category": "飲食"
                             ]
                             
@@ -166,54 +196,19 @@ class QRCodeScannerView: UIView, AVCaptureMetadataOutputObjectsDelegate {
                                 .responseJSON{
                                     response in switch response.result {
                                     case .Success(let JSON):
-                                        self.removeFromSuperview()
+                                        UIView.animateWithDuration(0.3, animations: {
+                                            self.alpha = 0
+                                            }, completion: { finished in
+                                                self.removeFromSuperview()
+                                                self.delegate!.CodeRecordFinish(self)
+                                        })
                                         print (JSON)
                                     case .Failure(let error):
                                         print("Request failed with error: \(error)")
                                     }
                             }
                         }
-                        
-                        }) { (error) -> Void in
-                            
-                            print("1. Something went wrong -> \(error?.localizedDescription)")
-                            
-                            let keychain = KeychainSwift()
-                            let headers = [
-                                "x-access-token": keychain.get("token")!
-                            ]
-                            
-                            for (var i = 0; i < self.scanData.count; i = i + 3) {
-                                let count:Int? = Int((self.scanData[i+1] as! String).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
-                                let amount:Int? = Int((self.scanData[i+2] as! String).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()))
-                                let data : [String: AnyObject] = [
-                                    "item": self.scanData[i],
-                                    "amount": count!*amount!,
-                                    "latitude": "0.00",
-                                    "longitude": "0.00",
-                                    "category": "飲食"
-                                ]
-                                
-                                Alamofire.request(.POST, "http://140.115.26.17:3000/api/record", parameters: data, headers: headers)
-                                    .responseJSON{
-                                        response in switch response.result {
-                                        case .Success(let JSON):
-                                            UIView.animateWithDuration(0.3, animations: {
-                                                self.alpha = 0
-                                                }, completion: { finished in
-                                                    self.removeFromSuperview()
-                                                    self.delegate!.CodeRecordFinish(self)
-                                            })
-                                            print (JSON)
-                                        case .Failure(let error):
-                                            print("Request failed with error: \(error)")
-                                        }
-                                }
-                            }
                     }
-                } catch (let error) {
-                    print("Error \(error)")
-                }
             
                 self.removeFromSuperview()
             }

@@ -57,7 +57,7 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
         clearButton.titleLabel?.font = IonIcons.fontWithSize(50)
         clearButton.setTitle(ion_ios_close_empty, forState: .Normal)
         clearButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        clearButton.addTarget(self, action: "cancelView:", forControlEvents: .TouchUpInside)
+        clearButton.addTarget(self, action: #selector(RecordView.cancelView(_:)), forControlEvents: .TouchUpInside)
         self.addSubview(clearButton)
         
         let itemBorder = CALayer()
@@ -74,7 +74,7 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
         itemField.returnKeyType = .Done
         itemField.textColor = UIColor(hex: "#ECEFF1")
         itemField.tag = 1
-        itemField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        itemField.addTarget(self, action: #selector(RecordView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         itemField.attributedPlaceholder = NSAttributedString(string:"品項", attributes:[NSForegroundColorAttributeName: UIColor(hex: "#B0BEC5")])
         self.addSubview(itemField)
         
@@ -101,7 +101,7 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
         //recordButton.backgroundColor = UIColor(red: 214/255, green: 230/255, blue: 229/255, alpha: 1)
         recordButton.pulseColor = UIColor(hex: "#eceff1")
         recordButton.setTitleColor(UIColor(hex: "#B0BEC5"), forState: .Normal)
-        recordButton.addTarget(self, action: "recordData:", forControlEvents: .TouchUpInside)
+        recordButton.addTarget(self, action: #selector(RecordView.recordData(_:)), forControlEvents: .TouchUpInside)
         self.addSubview(recordButton)
     }
 
@@ -214,9 +214,7 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
                 sender.enabled = false
                 sender.setTitle("紀錄中...", forState: .Normal)
                 recordButton.pulse()
-                try SwiftLocation.shared.currentLocation(Accuracy.Neighborhood, timeout: 20, onSuccess: { (location) -> Void in
-                    
-                    print("1. Location found \(location?.description)")
+                LocationManager.shared.observeLocations(.Block, frequency: .OneShot, onSuccess: { (location) -> Void in
                     
                     let keychain = KeychainSwift()
                     let headers = [
@@ -226,8 +224,8 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
                     let data : [String: AnyObject] = [
                         "item": item,
                         "amount": amount,
-                        "latitude": (location?.coordinate.latitude)!,
-                        "longitude": (location?.coordinate.longitude)!,
+                        "latitude": (location.coordinate.latitude),
+                        "longitude": (location.coordinate.longitude),
                         "category": "飲食"
                     ]
                     
@@ -248,18 +246,12 @@ class RecordView: UIView, UITextFieldDelegate, UITableViewDelegate, UITableViewD
                     }
                     
                     }) { (error) -> Void in
-                        print("1. Something went wrong -> \(error?.localizedDescription)")
                         self.recordButton.enabled = true
                         self.recordButton.setTitle("紀錄", forState: .Normal)
                 }
             }
             
-        } catch (let error) {
-            print("Error \(error)")
-            sender.enabled = true
-            sender.setTitle("紀錄", forState: .Normal)
         }
-
     }
     
     required init?(coder aDecoder: NSCoder) {
